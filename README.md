@@ -40,7 +40,7 @@
 ## 5. 설정 및 실행 방법
 
 ### API 키 설정
-`local.properties` 파일에 아래와 같이 API 키를 추가해야 합니다 (이 파일은 보안을 위해 커밋되지 않습니다).
+`local.properties` 파일에 아래와 같이 API 키를 추가해야 합니다
 
 ```properties
 # Google Maps 및 Routes API 키
