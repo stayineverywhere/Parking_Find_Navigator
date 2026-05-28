@@ -1,27 +1,63 @@
-# Parking Map App
+# 대전 스마트 주차 내비게이션 (Daejeon Parking Finder)
 
-A Compose-based Android app that shows a map, lets users pick start/destination points, and recommends nearby parking lots with filters and ranking.
+대전광역시의 실시간 주차장 현황과 최적의 경로 안내를 결합하여 주차 문제를 해결하는 스마트 내비게이션 앱입니다.
 
-## Setup
+## 1. 서비스 개요
 
-Add your API values to `local.properties` (do not commit these):
+### 제안 배경 및 필요성
+- **기존 서비스의 한계**: 대부분의 길찾기 서비스는 목적지까지의 경로만 안내하며, 주차장 정보가 분리되어 있어 목적지 도착 후 주차장을 찾는 데 추가적인 시간이 소요됩니다.
+- **배회 운행 문제**: 대전시 주요 상업지역 및 행사장 주변에서 주차장 만차 여부를 미리 알 수 없어 발생하는 불필요한 배회 운행은 도심 교통 체증의 주요 원인입니다.
+- **정보의 정확성**: 기존 앱들은 '원활/혼잡' 등 추상적인 정보를 제공하여 실제 방문 시 만차인 경우가 많으나, 본 서비스는 정확한 주차 가능 면수를 수치로 제공합니다.
 
-```
+### 차별점
+- **통합 경로 안내**: 자동차 경로 탐색 시 목적지 근처의 최적 주차장을 자동으로 추천하고, 주차 후 목적지까지의 도보 경로까지 한 번에 안내합니다.
+- **실시간 데이터 기반**: '원활/혼잡' 대신 총 주차면수와 현재 주차 가능 면수를 정확한 숫자로 표기합니다.
+- **전수 조사 정보**: 서비스 제휴 주차장에 국한되지 않고 대전시 내 모든 공영 및 민간 주차장 데이터를 포함합니다.
+
+## 2. 주요 기능
+
+- **지능형 경로 탐색**: Google Routes API와 OSRM(한국 내 경로 보완)을 활용한 실시간 교통 정보 반영 경로 안내.
+- **주차장 추천 및 필터링**: 목적지 반경 2km 이내의 주차장을 실시간 잔여 면수 순으로 추천.
+- **멀티모달 가이드**: 운전 경로(Driving)와 도보 경로(Walking)를 통합한 시각적 폴리라인 렌더링.
+- **인앱 내비게이션**: 목적지 방향 및 남은 거리/시간을 보여주는 내비게이션 오버레이 제공.
+- **주정차 허용 정보**: 경찰청 데이터를 활용한 공휴일 도심 주정차 허용 구간 정보 연계.
+
+## 3. 활용 데이터
+
+본 프로젝트는 공공데이터포털의 Open API를 활용합니다.
+- **대전광역시_주차장 정보 제공 API 서비스 2**: 대전시 내 주차장의 위치, 총 면수, 실시간 잔여 면수 정보.
+- **경찰청 대전광역시경찰청_대전지역 주정차 허용 현황**: 공휴일 및 도심 주정차 허용 구간 정보.
+
+## 4. 기술 스택
+
+- **Language**: Kotlin 2.2.10
+- **UI Framework**: Jetpack Compose (Material 3)
+- **Map & Location**: Google Maps SDK for Android, Play Services Location
+- **Networking**: Retrofit 2.9.0, OkHttp 4.12.0
+- **Routing**: Google Routes API, OSRM (Open Source Routing Machine)
+- **Architecture**: Clean Architecture, Repository Pattern
+
+## 5. 설정 및 실행 방법
+
+### API 키 설정
+`local.properties` 파일에 아래와 같이 API 키를 추가해야 합니다 (이 파일은 보안을 위해 커밋되지 않습니다).
+
+```properties
+# Google Maps 및 Routes API 키
+ROUTES_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
+
+# 공공데이터포털 서비스 키
 PUBLIC_DATA_API_KEY=YOUR_DATA_GO_KR_SERVICE_KEY
 PARKING_API_BASE_URL=https://apis.data.go.kr/6300000/pis/parkinglotIF
 ```
 
-If `PARKING_API_BASE_URL` or `PUBLIC_DATA_API_KEY` is missing, the app falls back to sample parking data.
+### 실행
+1. Android Studio에서 프로젝트를 엽니다.
+2. Gradle Sync를 완료합니다.
+3. 지원되는 Android 기기 또는 에뮬레이터에서 `app`을 실행합니다.
 
-## Run
+## 6. 기대 효과
 
-Open the project in Android Studio and run the `app` configuration.
-
-## Notes
-
-- The UI mirrors the ParkingLot web reference: start/end confirmation flow, radius filter, and congestion-colored list.
-- Map rendering uses MapLibre with an OSM-based demo style (`https://demotiles.maplibre.org/style.json`). This does not require an API key but is intended for light usage.
-- For production usage, switch to your own tile server or a provider with an API key and usage terms.
-- Search and reverse-geocoding rely on Android Geocoder (network required).
-- The parking API parser expects the XML schema from the `pis/parkinglotIF` endpoint. Adjust field mapping in `app/src/main/java/com/example/bigdata/data/ParkingRepository.kt` if the schema changes.
-- Route navigation launches Google Maps intents.
+- **교통 체증 완화**: 주차장을 찾아 배회하는 차량을 줄여 도심 교통 흐름을 개선합니다.
+- **시민 편의성 증대**: 사전에 주차 공간을 확인함으로써 운전자의 스트레스를 감소시키고 이동 시간을 단축합니다.
+- **공공데이터 활성화**: 대전시의 주차 행정 데이터를 실생활에 유용한 서비스로 전환하여 데이터의 활용 가치를 입증합니다.
