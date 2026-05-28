@@ -1,4 +1,4 @@
-# 대전 스마트 주차 내비게이션 (Daejeon Parking Finder)
+# 대전 스마트 주차 내비게이션 (Daejeon Parking Find Navigator)
 
 대전광역시의 실시간 주차장 현황과 최적의 경로 안내를 결합하여 주차 문제를 해결하는 스마트 내비게이션 앱입니다.
 
